@@ -7,14 +7,14 @@ interface Props {
 
 export default function TradeHistoryTable({ trades }: Props) {
   const icons = {
-    CALL: <ArrowUpCircle className="w-4 h-4 text-primary" />,
+    CALL: <ArrowUpCircle className="w-4 h-4 text-call" />,
     PUT: <ArrowDownCircle className="w-4 h-4 text-destructive" />,
     NEUTRO: <MinusCircle className="w-4 h-4 text-muted-foreground" />,
   };
 
   return (
     <div className="terminal-card p-4">
-      <h3 className="text-sm font-mono font-semibold text-foreground mb-3">Histórico de Sinais</h3>
+      <h3 className="text-sm font-semibold text-foreground mb-3">Histórico de Sinais</h3>
       <div className="overflow-auto max-h-[300px] scrollbar-thin">
         <table className="w-full text-xs font-mono">
           <thead>
@@ -36,7 +36,7 @@ export default function TradeHistoryTable({ trades }: Props) {
               </tr>
             ) : (
               trades.map(t => (
-                <tr key={t.id} className="border-b border-border/50 hover:bg-secondary/50">
+                <tr key={t.id} className="border-b border-border/50 hover:bg-secondary/50 transition-colors">
                   <td className="py-2 px-2 text-muted-foreground">
                     {t.timestamp.toLocaleTimeString()}
                   </td>
