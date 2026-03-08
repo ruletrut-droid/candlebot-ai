@@ -5,29 +5,50 @@ export function useScreenCapture() {
   const [screenshot, setScreenshot] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const rafRef = useRef<number | null>(null);
+  const lastCaptureRef = useRef<number>(0);
 
+  // Capture frame instantly from live video - no delay
   const captureFrame = useCallback(() => {
     const video = videoRef.current;
     if (!video || video.videoWidth === 0) return null;
-    
-    const canvas = document.createElement('canvas');
+
+    if (!canvasRef.current) {
+      canvasRef.current = document.createElement('canvas');
+    }
+    const canvas = canvasRef.current;
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     const ctx = canvas.getContext('2d');
     if (!ctx) return null;
     ctx.drawImage(video, 0, 0);
-    const dataUrl = canvas.toDataURL('image/png');
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
     setScreenshot(dataUrl);
     return dataUrl;
   }, []);
 
-  const startCapture = useCallback(async (intervalMs = 10000) => {
+  // Continuous real-time loop: updates screenshot every ~2s for display,
+  // but captureFrame() always grabs the CURRENT frame instantly when called
+  const startLiveLoop = useCallback(() => {
+    const loop = () => {
+      const now = Date.now();
+      // Update preview every 2 seconds to avoid excessive re-renders
+      if (now - lastCaptureRef.current >= 2000) {
+        captureFrame();
+        lastCaptureRef.current = now;
+      }
+      rafRef.current = requestAnimationFrame(loop);
+    };
+    rafRef.current = requestAnimationFrame(loop);
+  }, [captureFrame]);
+
+  const startCapture = useCallback(async () => {
     try {
       setError(null);
       const stream = await navigator.mediaDevices.getDisplayMedia({
-        video: { cursor: "never" } as any,
+        video: { cursor: "never", frameRate: { ideal: 30 } } as any,
         audio: false,
       });
       streamRef.current = stream;
@@ -41,15 +62,9 @@ export function useScreenCapture() {
 
       setIsCapturing(true);
 
-      // Capture immediately
-      setTimeout(() => captureFrame(), 500);
+      // Start real-time loop immediately
+      startLiveLoop();
 
-      // Then capture at interval
-      intervalRef.current = setInterval(() => {
-        captureFrame();
-      }, intervalMs);
-
-      // Handle user stopping share
       stream.getVideoTracks()[0].addEventListener('ended', () => {
         stopCapture();
       });
@@ -57,12 +72,12 @@ export function useScreenCapture() {
       setError(err.message || 'Falha ao capturar tela');
       setIsCapturing(false);
     }
-  }, [captureFrame]);
+  }, [captureFrame, startLiveLoop]);
 
   const stopCapture = useCallback(() => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
     }
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(t => t.stop());
@@ -72,6 +87,7 @@ export function useScreenCapture() {
       videoRef.current.srcObject = null;
       videoRef.current = null;
     }
+    canvasRef.current = null;
     setIsCapturing(false);
   }, []);
 

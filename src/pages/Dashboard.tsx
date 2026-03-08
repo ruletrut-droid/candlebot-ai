@@ -65,7 +65,7 @@ export default function Dashboard() {
   }, [screenshot, analyzing]);
 
   const handleStartCapture = useCallback(async () => {
-    await startCapture(10000);
+    await startCapture();
   }, [startCapture]);
 
   return (
