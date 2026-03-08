@@ -2,62 +2,61 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 @layer base {
   :root {
-    --background: 220 20% 7%;
-    --foreground: 210 20% 92%;
+    --background: 240 10% 4%;
+    --foreground: 250 15% 92%;
 
-    --card: 220 18% 10%;
-    --card-foreground: 210 20% 92%;
+    --card: 240 8% 8%;
+    --card-foreground: 250 15% 92%;
 
-    --popover: 220 18% 10%;
-    --popover-foreground: 210 20% 92%;
+    --popover: 240 8% 8%;
+    --popover-foreground: 250 15% 92%;
 
-    --primary: 142 70% 45%;
-    --primary-foreground: 220 20% 7%;
+    --primary: 270 100% 65%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 15% 16%;
-    --secondary-foreground: 210 20% 85%;
+    --secondary: 240 8% 12%;
+    --secondary-foreground: 250 15% 80%;
 
-    --muted: 220 14% 14%;
-    --muted-foreground: 215 15% 55%;
+    --muted: 240 6% 11%;
+    --muted-foreground: 250 10% 50%;
 
-    --accent: 142 70% 45%;
-    --accent-foreground: 220 20% 7%;
+    --accent: 270 80% 55%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 75% 55%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 220 15% 18%;
-    --input: 220 15% 18%;
-    --ring: 142 70% 45%;
+    --border: 270 20% 18%;
+    --input: 270 15% 16%;
+    --ring: 270 100% 65%;
 
-    --radius: 0.5rem;
+    --radius: 1rem;
 
     --call: 142 70% 45%;
     --call-foreground: 142 90% 10%;
     --put: 0 75% 55%;
     --put-foreground: 0 90% 95%;
-    --neutral: 220 10% 50%;
-    --neutral-foreground: 220 10% 90%;
+    --neutral: 250 10% 45%;
+    --neutral-foreground: 250 10% 85%;
 
     --chart-green: 142 70% 45%;
     --chart-red: 0 75% 55%;
     --chart-yellow: 45 90% 55%;
 
-    --glow-green: 0 0% 0% / 0;
-    --glow-red: 0 0% 0% / 0;
+    --glow-purple: 270 100% 65%;
 
-    --sidebar-background: 220 20% 7%;
-    --sidebar-foreground: 210 20% 92%;
-    --sidebar-primary: 142 70% 45%;
-    --sidebar-primary-foreground: 220 20% 7%;
-    --sidebar-accent: 220 15% 16%;
-    --sidebar-accent-foreground: 210 20% 85%;
-    --sidebar-border: 220 15% 18%;
-    --sidebar-ring: 142 70% 45%;
+    --sidebar-background: 240 10% 4%;
+    --sidebar-foreground: 250 15% 92%;
+    --sidebar-primary: 270 100% 65%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 270 60% 20%;
+    --sidebar-accent-foreground: 250 15% 85%;
+    --sidebar-border: 270 20% 18%;
+    --sidebar-ring: 270 100% 65%;
   }
 }
 
@@ -67,8 +66,8 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
-    font-family: 'Inter', sans-serif;
+    @apply bg-background text-foreground;
+    font-family: 'Nunito', sans-serif;
   }
 
   code, .font-mono {
@@ -78,7 +77,7 @@
 
 @layer components {
   .signal-call {
-    @apply bg-primary/10 border-primary text-primary;
+    @apply bg-call/10 border-call text-call;
     box-shadow: 0 0 20px hsl(142 70% 45% / 0.15);
   }
   .signal-put {
@@ -91,7 +90,7 @@
     color: hsl(var(--neutral-foreground));
   }
   .terminal-card {
-    @apply bg-card border border-border rounded-lg;
+    @apply bg-card border border-border rounded-2xl;
     backdrop-filter: blur(10px);
   }
   .glow-green {
@@ -100,8 +99,11 @@
   .glow-red {
     box-shadow: 0 0 30px hsl(0 75% 55% / 0.2), inset 0 0 30px hsl(0 75% 55% / 0.05);
   }
+  .glow-purple {
+    box-shadow: 0 0 30px hsl(270 100% 65% / 0.3), inset 0 0 30px hsl(270 100% 65% / 0.05);
+  }
   .candle-green {
-    @apply bg-primary;
+    background: hsl(var(--call));
   }
   .candle-red {
     @apply bg-destructive;
@@ -111,14 +113,15 @@
     scrollbar-color: hsl(var(--border)) transparent;
   }
   .pulse-dot {
-    @apply w-2 h-2 rounded-full bg-primary;
+    @apply w-2 h-2 rounded-full;
+    background: hsl(var(--primary));
     animation: pulse-glow 2s ease-in-out infinite;
   }
 }
 
 @keyframes pulse-glow {
-  0%, 100% { opacity: 1; box-shadow: 0 0 5px hsl(142 70% 45% / 0.5); }
-  50% { opacity: 0.5; box-shadow: 0 0 15px hsl(142 70% 45% / 0.8); }
+  0%, 100% { opacity: 1; box-shadow: 0 0 5px hsl(270 100% 65% / 0.5); }
+  50% { opacity: 0.5; box-shadow: 0 0 15px hsl(270 100% 65% / 0.8); }
 }
 
 @keyframes slide-up {

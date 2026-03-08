@@ -3,7 +3,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { motion } from 'framer-motion';
-import { TrendingUp, Lock, Mail } from 'lucide-react';
+import { Sparkles, Lock, Mail } from 'lucide-react';
 
 export default function AuthPage() {
   const { signIn, signUp } = useAuth();
@@ -31,11 +31,11 @@ export default function AuthPage() {
       >
         <div className="terminal-card p-8">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-              <TrendingUp className="w-6 h-6 text-primary" />
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center glow-purple">
+              <Sparkles className="w-7 h-7 text-primary" />
             </div>
             <div>
-              <h1 className="text-xl font-bold font-mono text-foreground">BinaryBot</h1>
+              <h1 className="text-2xl font-extrabold text-foreground tracking-tight">PRISMA IA</h1>
               <p className="text-xs text-muted-foreground">Trading Intelligence 1M</p>
             </div>
           </div>
@@ -48,7 +48,7 @@ export default function AuthPage() {
                 placeholder="Email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="pl-10 bg-secondary border-border"
+                className="pl-10 bg-secondary border-border rounded-xl"
                 required
               />
             </div>
@@ -59,7 +59,7 @@ export default function AuthPage() {
                 placeholder="Senha"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="pl-10 bg-secondary border-border"
+                className="pl-10 bg-secondary border-border rounded-xl"
                 required
                 minLength={6}
               />
@@ -69,7 +69,7 @@ export default function AuthPage() {
               <p className="text-destructive text-sm">{error}</p>
             )}
 
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full rounded-xl" disabled={loading}>
               {loading ? '...' : isSignUp ? 'Criar Conta' : 'Entrar'}
             </Button>
 
