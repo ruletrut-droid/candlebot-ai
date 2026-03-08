@@ -33,7 +33,7 @@ export default function CandleVisualizer({ candles }: Props) {
                   style={{ height: `${h}px` }}
                 />
                 <span className="text-[8px] text-muted-foreground font-mono">
-                  {candle.pattern.slice(0, 3)}
+                  {(candle.pattern || '---').slice(0, 3)}
                 </span>
               </motion.div>
             );
